@@ -3,6 +3,8 @@
   var body = document.body;
   var toggle = document.querySelector(".theme-toggle");
   var toggleText = document.querySelector(".toggle-text");
+  var menuToggle = document.querySelector(".menu-toggle");
+  var primaryNav = document.querySelector("#primary-nav");
   var modal = document.querySelector("#content-modal");
   var modalBody = document.querySelector("#modal-body");
   var modalClose = document.querySelector(".modal-close");
@@ -44,6 +46,33 @@
       var nextTheme = body.classList.contains("dark-mode") ? "light" : "dark";
       localStorage.setItem(storageKey, nextTheme);
       applyTheme(nextTheme);
+    });
+  }
+
+  function setMenu(open) {
+    body.classList.toggle("nav-open", open);
+
+    if (menuToggle) {
+      menuToggle.setAttribute("aria-expanded", String(open));
+      menuToggle.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
+    }
+  }
+
+  if (menuToggle && primaryNav) {
+    menuToggle.addEventListener("click", function () {
+      setMenu(!body.classList.contains("nav-open"));
+    });
+
+    primaryNav.addEventListener("click", function (event) {
+      if (event.target.closest("a")) {
+        setMenu(false);
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        setMenu(false);
+      }
     });
   }
 

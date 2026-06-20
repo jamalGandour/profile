@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=4">
   </head>
   <body>
     <header class="site-header">
@@ -17,7 +17,13 @@
         <span>Jamal Ahmed</span>
       </a>
 
-      <nav aria-label="Primary navigation">
+      <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav id="primary-nav" aria-label="Primary navigation">
         <a href="#services">Services</a>
         <a href="#agents">AI Agents</a>
         <a href="#blog">Blog</a>
@@ -346,13 +352,18 @@
       </div>
     </div>
 
-    <a class="whatsapp-float" href="https://wa.me/966509649029" aria-label="Contact Jamal Ahmed on WhatsApp">WhatsApp</a>
+    <a class="whatsapp-float" href="https://wa.me/966509649029" aria-label="Contact Jamal Ahmed on WhatsApp">
+      <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <path d="M16.02 3.2A12.72 12.72 0 0 0 5.15 22.52L3.2 28.8l6.47-1.87A12.72 12.72 0 1 0 16.02 3.2Zm0 2.36a10.36 10.36 0 1 1-5.28 19.27l-.37-.22-3.72 1.08 1.12-3.6-.24-.38A10.36 10.36 0 0 1 16.02 5.56Zm-4.3 5.62c-.22 0-.57.08-.87.41-.3.33-1.14 1.11-1.14 2.71s1.17 3.14 1.33 3.36c.16.22 2.26 3.62 5.58 4.93 2.76 1.09 3.32.87 3.92.81.6-.05 1.94-.79 2.21-1.55.27-.76.27-1.41.19-1.55-.08-.14-.3-.22-.63-.38-.33-.16-1.94-.96-2.24-1.07-.3-.11-.52-.16-.74.16-.22.33-.85 1.07-1.04 1.29-.19.22-.38.24-.71.08-.33-.16-1.39-.51-2.64-1.63-.98-.87-1.64-1.95-1.83-2.28-.19-.33-.02-.51.14-.67.15-.15.33-.38.49-.57.16-.19.22-.33.33-.55.11-.22.05-.41-.03-.57-.08-.16-.72-1.78-1.01-2.43-.27-.64-.55-.55-.76-.56h-.61Z"/>
+      </svg>
+      <span>WhatsApp</span>
+    </a>
 
     <footer>
       <span>Jamal Ahmed</span>
       <span>Supply Chain Consultant & AI Solutions Specialist</span>
     </footer>
 
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=4"></script>
   </body>
 </html>

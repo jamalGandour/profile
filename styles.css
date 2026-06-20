@@ -93,6 +93,42 @@ a {
   box-shadow: inset 0 -4px 0 var(--gold);
 }
 
+.menu-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+  gap: 5px;
+  flex-direction: column;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+body.nav-open .menu-toggle span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+body.nav-open .menu-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+body.nav-open .menu-toggle span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 nav {
   display: flex;
   flex-wrap: wrap;
@@ -845,15 +881,27 @@ body.dark-mode .metrics strong {
   bottom: 18px;
   z-index: 30;
   display: inline-flex;
-  min-height: 48px;
+  min-height: 52px;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  background: var(--yellow);
-  color: var(--black);
-  padding: 12px 16px;
+  gap: 10px;
+  border-radius: 999px;
+  background: #25d366;
+  color: #ffffff;
+  padding: 12px 18px;
   font-weight: 900;
-  box-shadow: var(--shadow);
+  box-shadow: 0 18px 46px rgba(37, 211, 102, 0.28);
+}
+
+.whatsapp-float svg {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+
+.whatsapp-float:hover {
+  transform: translateY(-2px);
 }
 
 footer {
@@ -876,12 +924,13 @@ footer {
 
 @media (max-width: 980px) {
   .site-header {
-    grid-template-columns: 1fr;
-    align-items: start;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
   }
 
   nav {
     justify-content: flex-start;
+    grid-column: 1 / -1;
   }
 
   .hero,
@@ -943,30 +992,99 @@ footer {
   }
 
   .site-header {
-    position: static;
+    position: sticky;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 10px;
+    padding: 12px 18px;
   }
 
-  nav {
+  .brand {
+    min-width: 0;
+  }
+
+  .brand span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  #primary-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    grid-template-columns: 1fr;
+    gap: 6px;
     width: 100%;
+    margin-top: 4px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel);
+    padding: 10px;
+    box-shadow: var(--shadow);
+  }
+
+  .js #primary-nav {
+    display: none;
+  }
+
+  body.nav-open #primary-nav {
+    display: grid;
   }
 
   nav a {
-    border: 1px solid var(--line);
+    border: 0;
     border-radius: 8px;
-    padding: 9px 10px;
-    text-align: center;
+    padding: 11px 12px;
+    text-align: left;
   }
 
-  .theme-toggle,
+  nav a:hover {
+    background: color-mix(in srgb, var(--blue) 10%, var(--panel));
+  }
+
+  .theme-toggle {
+    grid-column: 3;
+    grid-row: 1;
+    width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .toggle-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
   .small-button {
     width: 100%;
   }
 
   .whatsapp-float {
-    left: 18px;
     right: 18px;
+    left: auto;
+    width: 56px;
+    height: 56px;
+    min-height: 56px;
+    border-radius: 50%;
+    padding: 0;
+  }
+
+  .whatsapp-float span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 }

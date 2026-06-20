@@ -1,0 +1,11 @@
+{
+  "name": "jamal-profile-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Jamal Ahmed profile website with Node.js, SQLite, blog, training, and admin publishing.",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check script.js && node --check admin.js"
+  }
+}

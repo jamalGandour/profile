@@ -659,6 +659,105 @@ body.dark-mode .metrics strong {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.trust-section,
+.method-section {
+  background: var(--bg);
+}
+
+.trust-grid,
+.method-timeline,
+.resource-grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.trust-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.trust-grid article,
+.method-timeline article,
+.resource-grid article {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 22px;
+  box-shadow: 0 14px 36px rgba(7, 50, 110, 0.08);
+}
+
+.trust-grid strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--blue-strong);
+  font-size: 19px;
+  line-height: 1.25;
+}
+
+.trust-grid span {
+  display: block;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.method-timeline {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.method-timeline article {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  border-top: 5px solid var(--gold);
+}
+
+.method-timeline span {
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.resources-section {
+  background: var(--surface);
+}
+
+.resource-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.resource-grid article {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.resource-grid span {
+  width: fit-content;
+  border-radius: 999px;
+  background: var(--gold-soft);
+  color: var(--gold);
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.booking-steps {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.booking-steps span {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 11px 13px;
+  font-weight: 900;
+}
+
 .section-heading {
   display: flex;
   align-items: end;
@@ -1150,7 +1249,10 @@ footer {
   .course-grid,
   .content-grid,
   .package-grid,
-  .case-grid {
+  .case-grid,
+  .trust-grid,
+  .method-timeline,
+  .resource-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -1193,6 +1295,9 @@ footer {
   .package-grid,
   .case-grid,
   .academy-paths,
+  .trust-grid,
+  .method-timeline,
+  .resource-grid,
   .form-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1245,6 +1350,9 @@ footer {
   .case-grid,
   .academy-paths,
   .academy-stats,
+  .trust-grid,
+  .method-timeline,
+  .resource-grid,
   .form-grid,
   .admin-list article {
     grid-template-columns: 1fr;

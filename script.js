@@ -94,6 +94,7 @@
   loadTrainings();
   setupContentActions();
   setupLabAdvisor();
+  setupConsultationBrief();
   setupReveal();
 
   async function loadBlogPosts() {
@@ -323,6 +324,37 @@
         '</ul>'
       ].join("");
     });
+  }
+
+  function setupConsultationBrief() {
+    var link = document.querySelector("#consultation-whatsapp");
+    var service = document.querySelector("#consultation-service");
+    var priority = document.querySelector("#consultation-priority");
+    var timeline = document.querySelector("#consultation-timeline");
+
+    if (!link || !service || !priority || !timeline) {
+      return;
+    }
+
+    function updateLink() {
+      var message = [
+        "Hello Jamal Ahmed, I would like to discuss a business improvement opportunity.",
+        "",
+        "Service: " + service.value,
+        "Priority: " + priority.value,
+        "Timeline: " + timeline.value,
+        "",
+        "Please advise the recommended next step."
+      ].join("\n");
+
+      link.href = "https://wa.me/966509649029?text=" + encodeURIComponent(message);
+    }
+
+    [service, priority, timeline].forEach(function (field) {
+      field.addEventListener("change", updateLink);
+    });
+
+    updateLink();
   }
 
   function openModal(html) {

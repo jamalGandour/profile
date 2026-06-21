@@ -15,6 +15,7 @@
   setupDynamicForms();
   setupBlogForm();
   setupTrainingForm();
+  setupSettings();
 
   if (password) {
     unlockAdmin();
@@ -66,6 +67,7 @@
     document.querySelector("#login-panel").hidden = true;
     document.querySelector("#content-manager").hidden = false;
     await refreshExisting();
+    await refreshSettings();
   }
 
   function setupTabs() {
@@ -84,6 +86,10 @@
     document.querySelectorAll(".admin-section").forEach(function (section) {
       section.hidden = section.id !== target;
     });
+
+    if (target === "settings-admin") {
+      refreshSettings();
+    }
   }
 
   function setupDynamicForms() {
@@ -272,6 +278,128 @@
     if (!response.ok) {
       throw new Error("Delete failed");
     }
+  }
+
+  function setupSettings() {
+    var refreshButton = document.querySelector("#refresh-settings");
+    var sqliteButton = document.querySelector("#download-sqlite-backup");
+    var contentButton = document.querySelector("#download-content-backup");
+
+    if (refreshButton) {
+      refreshButton.addEventListener("click", refreshSettings);
+    }
+
+    if (sqliteButton) {
+      sqliteButton.addEventListener("click", function () {
+        downloadAdminFile("/api/admin/backup/sqlite", "settings-status", "Preparing SQLite backup...");
+      });
+    }
+
+    if (contentButton) {
+      contentButton.addEventListener("click", function () {
+        downloadAdminFile("/api/admin/backup/content", "settings-status", "Preparing content JSON export...");
+      });
+    }
+  }
+
+  async function refreshSettings() {
+    var target = document.querySelector("#system-status");
+    var status = document.querySelector("#settings-status");
+
+    if (!target || !password) {
+      return;
+    }
+
+    try {
+      var info = await getJson("/api/admin/status");
+      target.innerHTML = [
+        statusRow("Database Mode", info.database_mode),
+        statusRow("Database Path", info.database_path),
+        statusRow("Database Folder", info.database_folder),
+        statusRow("Database Size", formatBytes(info.database_size_bytes)),
+        statusRow("Database Updated", formatDate(info.database_updated_at)),
+        statusRow("Blogs", String(info.blog_count) + " total, " + String(info.draft_blog_count) + " draft"),
+        statusRow("Training Programs", String(info.training_count) + " total, " + String(info.draft_training_count) + " draft"),
+        statusRow("Server Time", formatDate(info.server_time)),
+        statusRow("Node.js", info.node_version),
+        statusRow("Recommendation", info.backup_recommendation)
+      ].join("");
+
+      if (status) {
+        status.textContent = info.database_inside_deployment
+          ? "Warning: database is still inside the deployment folder. Set DB_PATH on Hostinger before production updates."
+          : "Good: database is using an external persistent folder.";
+      }
+    } catch {
+      target.innerHTML = "<p>Could not load system status. Check the admin password.</p>";
+      if (status) {
+        status.textContent = "Settings status could not be loaded.";
+      }
+    }
+  }
+
+  async function downloadAdminFile(url, statusId, loadingMessage) {
+    var status = document.querySelector("#" + statusId);
+    if (status) {
+      status.textContent = loadingMessage;
+    }
+
+    try {
+      var response = await fetch(url, { headers: { "x-admin-password": password } });
+      if (!response.ok) {
+        throw new Error("Download failed");
+      }
+
+      var blob = await response.blob();
+      var filename = filenameFromDisposition(response.headers.get("Content-Disposition")) || "jamal-profile-backup";
+      var objectUrl = URL.createObjectURL(blob);
+      var link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(objectUrl);
+
+      if (status) {
+        status.textContent = "Backup download started: " + filename;
+      }
+    } catch {
+      if (status) {
+        status.textContent = "Could not download backup. Check password and server permissions.";
+      }
+    }
+  }
+
+  function statusRow(label, value) {
+    return '<div class="status-row"><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(value || "-") + '</span></div>';
+  }
+
+  function formatBytes(bytes) {
+    var value = Number(bytes) || 0;
+    if (value < 1024) {
+      return value + " B";
+    }
+    if (value < 1024 * 1024) {
+      return (value / 1024).toFixed(1) + " KB";
+    }
+    return (value / (1024 * 1024)).toFixed(1) + " MB";
+  }
+
+  function formatDate(value) {
+    if (!value) {
+      return "-";
+    }
+    try {
+      return new Date(value).toLocaleString();
+    } catch {
+      return value;
+    }
+  }
+
+  function filenameFromDisposition(disposition) {
+    var match = /filename="([^"]+)"/.exec(disposition || "");
+    return match ? match[1] : "";
   }
 
   async function refreshExisting() {

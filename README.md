@@ -75,6 +75,17 @@ DB_PATH=/home/your-hostinger-user/profile-data/jamal-profile.db
 
 The app will create the folder and database if they do not exist. Before changing this on production, copy the current live database to the new persistent location and keep a backup.
 
+## Admin Backup Tools
+
+The Admin dashboard includes a `Settings` tab with:
+
+- System status and database path check
+- Full SQLite database download
+- JSON export for blog posts and training programs
+- Hostinger pre-update checklist
+
+Use the SQLite backup before updating the Hostinger deployment from GitHub.
+
 Local development still works without `DB_PATH`; it will use:
 
 ```text

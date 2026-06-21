@@ -88,6 +88,24 @@ server.listen(PORT, () => {
 });
 
 async function handleApi(req, res, url) {
+  if (req.method === "GET" && url.pathname === "/api/admin/status") {
+    requireAdmin(req);
+    sendJson(res, 200, getSystemStatus());
+    return;
+  }
+
+  if (req.method === "GET" && url.pathname === "/api/admin/backup/sqlite") {
+    requireAdmin(req);
+    sendSqliteBackup(res);
+    return;
+  }
+
+  if (req.method === "GET" && url.pathname === "/api/admin/backup/content") {
+    requireAdmin(req);
+    sendContentBackup(res);
+    return;
+  }
+
   if (req.method === "GET" && url.pathname === "/api/blogs") {
     const includeDrafts = url.searchParams.get("all") === "1";
     if (includeDrafts) {
@@ -365,6 +383,94 @@ function sendJson(res, statusCode, payload) {
 function sendText(res, statusCode, text) {
   res.writeHead(statusCode, { "Content-Type": "text/plain; charset=utf-8" });
   res.end(text);
+}
+
+function sendDownload(res, statusCode, contentType, filename, payload) {
+  res.writeHead(statusCode, {
+    "Content-Type": contentType,
+    "Content-Disposition": `attachment; filename="${filename}"`,
+    "Cache-Control": "no-store"
+  });
+  res.end(payload);
+}
+
+function sendFileDownload(res, filePath, filename) {
+  fs.stat(filePath, (err, stat) => {
+    if (err || !stat.isFile()) {
+      sendJson(res, 404, { error: "Database file not found" });
+      return;
+    }
+
+    res.writeHead(200, {
+      "Content-Type": "application/vnd.sqlite3",
+      "Content-Disposition": `attachment; filename="${filename}"`,
+      "Content-Length": stat.size,
+      "Cache-Control": "no-store"
+    });
+    fs.createReadStream(filePath).pipe(res);
+  });
+}
+
+function getSystemStatus() {
+  const dbStat = fs.existsSync(DB_PATH) ? fs.statSync(DB_PATH) : null;
+  const blogCount = db.prepare("SELECT COUNT(*) AS count FROM blog_posts").get().count;
+  const trainingCount = db.prepare("SELECT COUNT(*) AS count FROM trainings").get().count;
+  const draftBlogCount = db.prepare("SELECT COUNT(*) AS count FROM blog_posts WHERE status = 'draft'").get().count;
+  const draftTrainingCount = db.prepare("SELECT COUNT(*) AS count FROM trainings WHERE status = 'draft'").get().count;
+  const relativeDbPath = path.relative(ROOT, DB_PATH);
+  const dbInsideDeployment = !relativeDbPath.startsWith("..") && !path.isAbsolute(relativeDbPath);
+
+  return {
+    server_time: new Date().toISOString(),
+    node_version: process.version,
+    environment: process.env.NODE_ENV || "local",
+    database_path: DB_PATH,
+    database_folder: path.dirname(DB_PATH),
+    database_inside_deployment: dbInsideDeployment,
+    database_mode: dbInsideDeployment ? "Deployment folder" : "External persistent folder",
+    database_size_bytes: dbStat ? dbStat.size : 0,
+    database_updated_at: dbStat ? dbStat.mtime.toISOString() : "",
+    blog_count: blogCount,
+    training_count: trainingCount,
+    draft_blog_count: draftBlogCount,
+    draft_training_count: draftTrainingCount,
+    backup_recommendation: dbInsideDeployment
+      ? "Move DB_PATH to a persistent Hostinger folder outside the GitHub deployment directory."
+      : "Good: DB_PATH points outside the deployment folder."
+  };
+}
+
+function sendSqliteBackup(res) {
+  db.exec("PRAGMA wal_checkpoint(FULL);");
+  const filename = `jamal-profile-sqlite-${backupStamp()}.db`;
+  sendFileDownload(res, DB_PATH, filename);
+}
+
+function sendContentBackup(res) {
+  const blogs = db.prepare("SELECT * FROM blog_posts ORDER BY created_at DESC").all().map(mapBlog);
+  const trainings = db.prepare("SELECT * FROM trainings ORDER BY created_at DESC").all().map(mapTraining);
+  const payload = JSON.stringify({
+    exported_at: new Date().toISOString(),
+    source: "Jamal Ahmed Profile Platform",
+    counts: {
+      blogs: blogs.length,
+      trainings: trainings.length
+    },
+    blogs,
+    trainings
+  }, null, 2);
+
+  sendDownload(
+    res,
+    200,
+    "application/json; charset=utf-8",
+    `jamal-profile-content-${backupStamp()}.json`,
+    payload
+  );
+}
+
+function backupStamp() {
+  return new Date().toISOString().replace(/[:.]/g, "-");
 }
 
 function clean(value) {

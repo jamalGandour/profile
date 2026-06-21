@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=6">
+    <link rel="stylesheet" href="styles.css?v=7">
   </head>
   <body>
     <header class="site-header">
@@ -57,6 +57,7 @@
             <button class="admin-tab active" type="button" data-admin-tab="blog-admin">Blog Post</button>
             <button class="admin-tab" type="button" data-admin-tab="training-admin">Training</button>
             <button class="admin-tab" type="button" data-admin-tab="existing-admin">Existing Content</button>
+            <button class="admin-tab" type="button" data-admin-tab="settings-admin">Settings</button>
           </div>
 
           <section class="admin-section" id="blog-admin">
@@ -209,10 +210,58 @@
               </div>
             </div>
           </section>
+
+          <section class="admin-section" id="settings-admin" hidden>
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Admin Settings</p>
+                <h2>Backup, system status, and Hostinger data safety.</h2>
+              </div>
+              <button class="button ghost" type="button" id="refresh-settings">Refresh Status</button>
+            </div>
+
+            <div class="settings-grid">
+              <article class="settings-card highlight-card">
+                <p class="meta-line">Critical Backup</p>
+                <h3>SQLite Database Backup</h3>
+                <p>Download the full SQLite database file. Use this before updating from GitHub or changing Hostinger deployment settings.</p>
+                <button class="button primary" type="button" id="download-sqlite-backup">Download SQLite Backup</button>
+              </article>
+
+              <article class="settings-card">
+                <p class="meta-line">Portable Content</p>
+                <h3>Export Content JSON</h3>
+                <p>Export all blogs and training programs as readable JSON. This is useful for content review, migration, and extra safety.</p>
+                <button class="button secondary" type="button" id="download-content-backup">Export Content JSON</button>
+              </article>
+
+              <article class="settings-card wide-card">
+                <p class="meta-line">System Status</p>
+                <h3>Production Data Location</h3>
+                <div class="status-table" id="system-status">
+                  <p>Loading system status...</p>
+                </div>
+              </article>
+
+              <article class="settings-card wide-card">
+                <p class="meta-line">Hostinger Checklist</p>
+                <h3>Before Updating From GitHub</h3>
+                <ol class="settings-list">
+                  <li>Confirm your live database is backed up.</li>
+                  <li>Confirm `DB_PATH` points to a persistent folder outside the GitHub deployment folder.</li>
+                  <li>Recommended path: `/home/YOUR_USER/profile-data/jamal-profile.db`.</li>
+                  <li>Download SQLite backup from this tab before major changes.</li>
+                  <li>After deployment, return here and check that Database Mode says `External persistent folder`.</li>
+                </ol>
+              </article>
+            </div>
+
+            <p class="status-message" id="settings-status"></p>
+          </section>
         </section>
       </section>
     </main>
 
-    <script src="admin.js?v=3"></script>
+    <script src="admin.js?v=4"></script>
   </body>
 </html>

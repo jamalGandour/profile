@@ -93,6 +93,7 @@
   loadBlogPosts();
   loadTrainings();
   setupContentActions();
+  setupLabAdvisor();
   setupReveal();
 
   async function loadBlogPosts() {
@@ -263,6 +264,64 @@
 
       var percent = quiz.length ? Math.round((score / quiz.length) * 100) : 0;
       result.textContent = "Your score: " + score + " / " + quiz.length + " (" + percent + "%)";
+    });
+  }
+
+  function setupLabAdvisor() {
+    var form = document.querySelector("#ai-lab-form");
+    var result = document.querySelector("#lab-result");
+
+    if (!form || !result) {
+      return;
+    }
+
+    var recommendations = {
+      inventory: {
+        title: "Inventory Risk Agent + Stock Health Dashboard",
+        body: "Start with ABC, slow-moving, shortage, expiry, and replenishment rules. Then connect the output to a weekly management dashboard and AI-generated action notes.",
+        steps: ["Clean item and stock data", "Define inventory risk rules", "Build dashboard and alert workflow"]
+      },
+      forecast: {
+        title: "Demand Planning Assistant + Forecast Review Routine",
+        body: "Build a structured forecast review process supported by historical demand, sales exceptions, customer context, and AI-assisted planning summaries.",
+        steps: ["Map demand history and exceptions", "Create forecast review templates", "Train planners on AI-assisted analysis"]
+      },
+      service: {
+        title: "Customer Delivery Follow-Up Agent",
+        body: "Use an AI assistant to organize customer requests, delivery risks, pending actions, and follow-up messages across sales, warehouse, and transport teams.",
+        steps: ["Define service risk categories", "Create follow-up scripts", "Build delivery action tracker"]
+      },
+      reporting: {
+        title: "Executive KPI Control Tower",
+        body: "Replace scattered manual reports with one weekly dashboard for service, inventory, planning, distribution, and cost performance.",
+        steps: ["Select leadership KPIs", "Automate data refresh", "Add AI management summary"]
+      }
+    };
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      var challenge = document.querySelector("#lab-challenge").value;
+      var data = document.querySelector("#lab-data").value;
+      var team = document.querySelector("#lab-team").value;
+      var recommendation = recommendations[challenge] || recommendations.inventory;
+      var readiness = data === "high" && team === "advanced"
+        ? "Ready for a pilot AI agent and custom workflow."
+        : data === "low" || team === "starter"
+          ? "Start with a focused diagnostic, data cleanup, and team enablement workshop."
+          : "Ready for a dashboard-first pilot with selected AI automation.";
+
+      result.innerHTML = [
+        '<p class="meta-line">Recommended Starting Point</p>',
+        '<h3>' + escapeHtml(recommendation.title) + '</h3>',
+        '<p>' + escapeHtml(recommendation.body) + '</p>',
+        '<p><strong>' + escapeHtml(readiness) + '</strong></p>',
+        '<ul>',
+        recommendation.steps.map(function (step) {
+          return '<li>' + escapeHtml(step) + '</li>';
+        }).join(""),
+        '</ul>'
+      ].join("");
     });
   }
 

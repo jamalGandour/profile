@@ -6,11 +6,11 @@ const { DatabaseSync } = require("node:sqlite");
 
 const PORT = Number(process.env.PORT || 3300);
 const ROOT = __dirname;
-const DATA_DIR = path.join(ROOT, "data");
-const DB_PATH = path.join(DATA_DIR, "jamal-profile.db");
+const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(ROOT, "data");
+const DB_PATH = path.resolve(process.env.DB_PATH || path.join(DATA_DIR, "jamal-profile.db"));
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Jamal@3300";
 
-fs.mkdirSync(DATA_DIR, { recursive: true });
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
 const db = new DatabaseSync(DB_PATH);
 db.exec(`
@@ -83,6 +83,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Jamal profile platform running at http://localhost:${PORT}`);
+  console.log(`SQLite database: ${DB_PATH}`);
   console.log(`Admin password: ${ADMIN_PASSWORD}`);
 });
 

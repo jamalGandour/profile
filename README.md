@@ -53,8 +53,33 @@ ADMIN_PASSWORD=your-secure-password
 - `script.js` - public website interactions
 - `admin.js` - admin dashboard interactions
 - `styles.css` - responsive design and dark mode
-- `data/jamal-profile.db` - SQLite content database
+- `data/jamal-profile.db` - local SQLite content database only, ignored by Git
 - `assets/jamal-ahmed-profile-enhanced.png` - professional profile image
+
+## Production Data Safety
+
+Do not keep the live SQLite database inside the GitHub deployment folder. Use a persistent folder outside the deployed project.
+
+Recommended Hostinger structure:
+
+```text
+/home/your-hostinger-user/profile-data/jamal-profile.db
+/home/your-hostinger-user/profile-data/backups/
+```
+
+Set this environment variable on the hosting server:
+
+```bash
+DB_PATH=/home/your-hostinger-user/profile-data/jamal-profile.db
+```
+
+The app will create the folder and database if they do not exist. Before changing this on production, copy the current live database to the new persistent location and keep a backup.
+
+Local development still works without `DB_PATH`; it will use:
+
+```text
+data/jamal-profile.db
+```
 
 ## Notes
 

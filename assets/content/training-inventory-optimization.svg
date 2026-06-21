@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Inventory optimization training</title>
+  <desc id="desc">Training visual showing stock health matrix and inventory categories.</desc>
+  <rect width="1200" height="675" fill="#ffffff"/>
+  <rect x="90" y="85" width="1020" height="505" rx="30" fill="#0b1220"/>
+  <text x="135" y="155" fill="#ffd447" font-family="Cairo, Arial" font-size="46" font-weight="900">Inventory Optimization Training</text>
+  <rect x="150" y="235" width="250" height="110" rx="16" fill="#0b4aa2"/>
+  <rect x="475" y="235" width="250" height="110" rx="16" fill="#c7972f"/>
+  <rect x="800" y="235" width="250" height="110" rx="16" fill="#ffd447"/>
+  <rect x="150" y="400" width="900" height="55" rx="16" fill="#101827" stroke="#263247"/>
+  <rect x="150" y="485" width="650" height="55" rx="16" fill="#101827" stroke="#263247"/>
+  <text x="185" y="305" fill="#ffffff" font-family="Cairo, Arial" font-size="30" font-weight="900">ABC</text>
+  <text x="510" y="305" fill="#ffffff" font-family="Cairo, Arial" font-size="30" font-weight="900">Aging</text>
+  <text x="835" y="305" fill="#05070a" font-family="Cairo, Arial" font-size="30" font-weight="900">Risk</text>
+</svg>

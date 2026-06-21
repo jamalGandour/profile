@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">AI agents for business training</title>
+  <desc id="desc">AI agents training visual with connected business functions.</desc>
+  <rect width="1200" height="675" fill="#05070a"/>
+  <text x="85" y="130" fill="#ffffff" font-family="Cairo, Arial" font-size="50" font-weight="900">Building AI Agents for Business</text>
+  <circle cx="600" cy="335" r="95" fill="#ffd447"/>
+  <text x="555" y="352" fill="#05070a" font-family="Cairo, Arial" font-size="36" font-weight="900">Agent</text>
+  <g stroke="#c7972f" stroke-width="7">
+    <path d="M505 335H310"/>
+    <path d="M695 335h195"/>
+    <path d="M600 240V120"/>
+    <path d="M600 430v120"/>
+  </g>
+  <g fill="#101827" stroke="#263247">
+    <rect x="155" y="285" width="150" height="100" rx="16"/>
+    <rect x="895" y="285" width="150" height="100" rx="16"/>
+    <rect x="525" y="55" width="150" height="90" rx="16"/>
+    <rect x="525" y="535" width="150" height="90" rx="16"/>
+  </g>
+  <text x="175" y="345" fill="#ffffff" font-family="Cairo, Arial" font-size="24" font-weight="800">Service</text>
+  <text x="930" y="345" fill="#ffffff" font-family="Cairo, Arial" font-size="24" font-weight="800">Sales</text>
+  <text x="552" y="112" fill="#ffffff" font-family="Cairo, Arial" font-size="24" font-weight="800">Stock</text>
+  <text x="548" y="592" fill="#ffffff" font-family="Cairo, Arial" font-size="24" font-weight="800">Report</text>
+</svg>

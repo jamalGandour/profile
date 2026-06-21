@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Waste and expiry visibility</title>
+  <desc id="desc">Expiry risk visual with product batches and warning indicators.</desc>
+  <rect width="1200" height="675" fill="#fff5cf"/>
+  <rect x="80" y="80" width="1040" height="515" rx="30" fill="#ffffff" stroke="#c7972f" stroke-width="4"/>
+  <text x="125" y="150" fill="#07326e" font-family="Cairo, Arial" font-size="46" font-weight="900">Waste &amp; Expiry Visibility</text>
+  <rect x="135" y="235" width="190" height="240" rx="16" fill="#0b4aa2"/>
+  <rect x="365" y="200" width="190" height="275" rx="16" fill="#ffd447"/>
+  <rect x="595" y="275" width="190" height="200" rx="16" fill="#c7972f"/>
+  <rect x="825" y="230" width="190" height="245" rx="16" fill="#101827"/>
+  <circle cx="935" cy="200" r="52" fill="#b42318"/>
+  <text x="920" y="218" fill="#ffffff" font-family="Arial" font-size="52" font-weight="900">!</text>
+  <text x="125" y="545" fill="#07326e" font-family="Cairo, Arial" font-size="30" font-weight="800">Batch Aging | Expiry Risk | Action Priority</text>
+</svg>

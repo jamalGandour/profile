@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">AI tools training for supply chain managers</title>
+  <desc id="desc">Training visual with learner dashboard and AI workflow elements.</desc>
+  <rect width="1200" height="675" fill="#f6f8fb"/>
+  <rect x="85" y="85" width="1030" height="505" rx="30" fill="#ffffff" stroke="#d9e1ee" stroke-width="3"/>
+  <text x="125" y="155" fill="#07326e" font-family="Cairo, Arial" font-size="44" font-weight="900">AI Tools for Supply Chain Managers</text>
+  <circle cx="240" cy="345" r="95" fill="#0b4aa2"/>
+  <rect x="420" y="245" width="560" height="54" rx="14" fill="#0b4aa2"/>
+  <rect x="420" y="330" width="430" height="54" rx="14" fill="#c7972f"/>
+  <rect x="420" y="415" width="500" height="54" rx="14" fill="#ffd447"/>
+  <text x="195" y="360" fill="#ffffff" font-family="Cairo, Arial" font-size="36" font-weight="900">AI</text>
+</svg>

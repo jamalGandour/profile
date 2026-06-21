@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">AI demand planning</title>
+  <desc id="desc">Forecast curve with planning notes and demand signals.</desc>
+  <rect width="1200" height="675" fill="#ffffff"/>
+  <rect x="78" y="82" width="1044" height="511" rx="28" fill="#0b1220"/>
+  <text x="120" y="154" fill="#ffd447" font-family="Cairo, Arial" font-size="42" font-weight="900">Demand Planning With AI</text>
+  <path d="M140 470 C280 360, 360 410, 470 300 S690 250, 820 180 S1000 230, 1080 140" fill="none" stroke="#5aa2ff" stroke-width="12" stroke-linecap="round"/>
+  <path d="M140 520 C280 500, 360 455, 470 430 S690 390, 820 320 S1000 320, 1080 260" fill="none" stroke="#ffd447" stroke-width="8" stroke-linecap="round" stroke-dasharray="22 20"/>
+  <rect x="150" y="215" width="230" height="95" rx="16" fill="#101827" stroke="#263247"/>
+  <text x="175" y="255" fill="#ffffff" font-family="Cairo, Arial" font-size="24" font-weight="800">Forecast Bias</text>
+  <text x="175" y="288" fill="#b5c1d3" font-family="Cairo, Arial" font-size="18">Exception review</text>
+  <rect x="760" y="420" width="270" height="95" rx="16" fill="#101827" stroke="#263247"/>
+  <text x="785" y="460" fill="#ffffff" font-family="Cairo, Arial" font-size="24" font-weight="800">AI Summary</text>
+  <text x="785" y="493" fill="#b5c1d3" font-family="Cairo, Arial" font-size="18">Demand signals</text>
+</svg>

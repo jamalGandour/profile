@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">AI tools for business teams</title>
+  <desc id="desc">Business AI workflow with prompt, analysis, report, and automation cards.</desc>
+  <rect width="1200" height="675" fill="#05070a"/>
+  <text x="82" y="125" fill="#ffffff" font-family="Cairo, Arial" font-size="50" font-weight="900">AI Tools for Business Teams</text>
+  <rect x="90" y="185" width="240" height="250" rx="22" fill="#101827" stroke="#263247"/>
+  <rect x="365" y="185" width="240" height="250" rx="22" fill="#101827" stroke="#263247"/>
+  <rect x="640" y="185" width="240" height="250" rx="22" fill="#101827" stroke="#263247"/>
+  <rect x="915" y="185" width="195" height="250" rx="22" fill="#ffd447"/>
+  <text x="125" y="265" fill="#ffd447" font-family="Cairo, Arial" font-size="28" font-weight="900">Prompt</text>
+  <text x="400" y="265" fill="#5aa2ff" font-family="Cairo, Arial" font-size="28" font-weight="900">Analyze</text>
+  <text x="675" y="265" fill="#ffffff" font-family="Cairo, Arial" font-size="28" font-weight="900">Report</text>
+  <text x="950" y="265" fill="#05070a" font-family="Cairo, Arial" font-size="28" font-weight="900">Automate</text>
+  <path d="M330 310h35M605 310h35M880 310h35" stroke="#c7972f" stroke-width="10" stroke-linecap="round"/>
+  <text x="90" y="535" fill="#b5c1d3" font-family="Cairo, Arial" font-size="28" font-weight="700">ChatGPT | Codex | Claude | Workflow Automation</text>
+</svg>

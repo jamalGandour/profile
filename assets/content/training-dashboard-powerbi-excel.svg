@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Power BI and Excel dashboards training</title>
+  <desc id="desc">Dashboard training visual with charts, tables, and KPI cards.</desc>
+  <rect width="1200" height="675" fill="#ffffff"/>
+  <rect x="70" y="80" width="1060" height="515" rx="28" fill="#f6f8fb" stroke="#d9e1ee" stroke-width="3"/>
+  <text x="110" y="150" fill="#07326e" font-family="Cairo, Arial" font-size="44" font-weight="900">Power BI &amp; Excel Dashboard Training</text>
+  <rect x="120" y="215" width="250" height="145" rx="16" fill="#0b4aa2"/>
+  <rect x="410" y="215" width="250" height="145" rx="16" fill="#ffd447"/>
+  <rect x="700" y="215" width="350" height="145" rx="16" fill="#ffffff" stroke="#d9e1ee" stroke-width="3"/>
+  <rect x="120" y="405" width="930" height="90" rx="16" fill="#ffffff" stroke="#d9e1ee" stroke-width="3"/>
+  <rect x="155" y="445" width="170" height="22" rx="11" fill="#0b4aa2"/>
+  <rect x="370" y="445" width="250" height="22" rx="11" fill="#c7972f"/>
+  <rect x="665" y="445" width="310" height="22" rx="11" fill="#ffd447"/>
+</svg>

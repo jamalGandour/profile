@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Supply chain KPI control tower</title>
+  <desc id="desc">Executive dashboard with KPI panels and performance indicators.</desc>
+  <rect width="1200" height="675" fill="#f6f8fb"/>
+  <text x="76" y="120" fill="#07326e" font-family="Cairo, Arial" font-size="48" font-weight="900">Supply Chain KPI Control Tower</text>
+  <rect x="75" y="170" width="320" height="180" rx="20" fill="#0b4aa2"/>
+  <rect x="440" y="170" width="320" height="180" rx="20" fill="#ffffff" stroke="#d9e1ee" stroke-width="3"/>
+  <rect x="805" y="170" width="320" height="180" rx="20" fill="#05070a"/>
+  <rect x="75" y="390" width="1050" height="190" rx="20" fill="#ffffff" stroke="#d9e1ee" stroke-width="3"/>
+  <text x="115" y="245" fill="#ffffff" font-family="Cairo, Arial" font-size="34" font-weight="900">Service</text>
+  <text x="480" y="245" fill="#07326e" font-family="Cairo, Arial" font-size="34" font-weight="900">Inventory</text>
+  <text x="845" y="245" fill="#ffd447" font-family="Cairo, Arial" font-size="34" font-weight="900">Cost</text>
+  <rect x="125" y="455" width="220" height="34" rx="17" fill="#0b4aa2"/>
+  <rect x="390" y="455" width="310" height="34" rx="17" fill="#c7972f"/>
+  <rect x="745" y="455" width="250" height="34" rx="17" fill="#ffd447"/>
+  <text x="115" y="305" fill="#ffd447" font-family="Cairo, Arial" font-size="30" font-weight="900">Weekly Control</text>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">AI inventory control dashboard</title>
+  <desc id="desc">Professional supply chain dashboard visual with inventory alerts and warehouse boxes.</desc>
+  <rect width="1200" height="675" fill="#f6f8fb"/>
+  <rect x="70" y="70" width="1060" height="535" rx="28" fill="#ffffff" stroke="#d9e1ee" stroke-width="3"/>
+  <rect x="70" y="70" width="1060" height="110" rx="28" fill="#0b4aa2"/>
+  <text x="115" y="140" fill="#ffffff" font-family="Cairo, Arial" font-size="44" font-weight="800">AI Inventory Control</text>
+  <circle cx="1010" cy="126" r="34" fill="#ffd447"/>
+  <path d="M980 126h60M1010 96v60" stroke="#05070a" stroke-width="8" stroke-linecap="round"/>
+  <rect x="120" y="230" width="280" height="250" rx="18" fill="#eef4ff"/>
+  <rect x="165" y="295" width="74" height="74" rx="10" fill="#c7972f"/>
+  <rect x="245" y="260" width="74" height="109" rx="10" fill="#0b4aa2"/>
+  <rect x="325" y="325" width="74" height="44" rx="10" fill="#ffd447"/>
+  <rect x="470" y="230" width="580" height="58" rx="12" fill="#f6f8fb"/>
+  <rect x="470" y="320" width="420" height="24" rx="12" fill="#0b4aa2"/>
+  <rect x="470" y="370" width="520" height="24" rx="12" fill="#c7972f"/>
+  <rect x="470" y="420" width="330" height="24" rx="12" fill="#ffd447"/>
+  <text x="120" y="545" fill="#07326e" font-family="Cairo, Arial" font-size="30" font-weight="800">Stock Risk | Slow Moving | Shortage Alerts</text>
+</svg>

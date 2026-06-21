@@ -142,13 +142,14 @@
   }
 
   function renderBlogCard(post) {
+    var titleAr = displayableArabic(post.title_ar);
     return [
       '<article class="content-card">',
       imageHtml(post.hero_image, post.title_en),
       '<div class="content-card-body">',
       '<p class="meta-line">' + escapeHtml(post.category || "Blog") + '</p>',
       '<h3>' + escapeHtml(post.title_en) + '</h3>',
-      post.title_ar ? '<p class="arabic-card-title" dir="rtl" lang="ar">' + escapeHtml(post.title_ar) + '</p>' : "",
+      titleAr ? '<p class="arabic-card-title" dir="rtl" lang="ar">' + escapeHtml(titleAr) + '</p>' : "",
       '<p>' + escapeHtml(post.summary_en || "") + '</p>',
       tagHtml(post.tags),
       '<button class="button primary small-button" type="button" data-blog-slug="' + escapeHtml(post.slug) + '">Read Article</button>',
@@ -158,13 +159,14 @@
   }
 
   function renderTrainingCard(training) {
+    var titleAr = displayableArabic(training.title_ar);
     return [
       '<article class="content-card">',
       imageHtml(training.hero_image, training.title_en),
       '<div class="content-card-body">',
       '<p class="meta-line">' + escapeHtml([training.category, training.level, training.duration].filter(Boolean).join(" | ")) + '</p>',
       '<h3>' + escapeHtml(training.title_en) + '</h3>',
-      training.title_ar ? '<p class="arabic-card-title" dir="rtl" lang="ar">' + escapeHtml(training.title_ar) + '</p>' : "",
+      titleAr ? '<p class="arabic-card-title" dir="rtl" lang="ar">' + escapeHtml(titleAr) + '</p>' : "",
       '<p>' + escapeHtml(training.summary_en || "") + '</p>',
       '<button class="button primary small-button" type="button" data-training-slug="' + escapeHtml(training.slug) + '">Start Training</button>',
       '</div>',
@@ -174,13 +176,15 @@
 
   async function openBlog(slug) {
     var post = await getJson("/api/blogs/" + encodeURIComponent(slug));
+    var titleAr = displayableArabic(post.title_ar);
+    var contentAr = displayableArabic(post.content_ar);
     openModal([
       imageHtml(post.hero_image, post.title_en, "modal-hero"),
       '<p class="meta-line">' + escapeHtml(post.category || "Blog") + '</p>',
       '<h2>' + escapeHtml(post.title_en) + '</h2>',
-      post.title_ar ? '<h3 dir="rtl" lang="ar">' + escapeHtml(post.title_ar) + '</h3>' : "",
+      titleAr ? '<h3 dir="rtl" lang="ar">' + escapeHtml(titleAr) + '</h3>' : "",
       '<div class="article-body">' + paragraphs(post.content_en) + '</div>',
-      post.content_ar ? '<div class="article-body arabic-article" dir="rtl" lang="ar">' + paragraphs(post.content_ar) + '</div>' : "",
+      contentAr ? '<div class="article-body arabic-article" dir="rtl" lang="ar">' + paragraphs(contentAr) + '</div>' : "",
       tagHtml(post.tags)
     ].join(""));
   }
@@ -207,15 +211,17 @@
     var videos = training.video_links || [];
     var sections = training.sections || [];
     var quiz = training.quiz || [];
+    var titleAr = displayableArabic(training.title_ar);
+    var summaryAr = displayableArabic(training.summary_ar);
     activeQuiz = quiz;
 
     openModal([
       imageHtml(training.hero_image, training.title_en, "modal-hero"),
       '<p class="meta-line">' + escapeHtml([training.category, training.level, training.duration].filter(Boolean).join(" | ")) + '</p>',
       '<h2>' + escapeHtml(training.title_en) + '</h2>',
-      training.title_ar ? '<h3 dir="rtl" lang="ar">' + escapeHtml(training.title_ar) + '</h3>' : "",
+      titleAr ? '<h3 dir="rtl" lang="ar">' + escapeHtml(titleAr) + '</h3>' : "",
       '<p>' + escapeHtml(training.summary_en || "") + '</p>',
-      training.summary_ar ? '<p dir="rtl" lang="ar">' + escapeHtml(training.summary_ar) + '</p>' : "",
+      summaryAr ? '<p dir="rtl" lang="ar">' + escapeHtml(summaryAr) + '</p>' : "",
       videos.length ? '<h3>Training Videos</h3><div class="video-grid">' + videos.map(videoPlayer).join("") + '</div>' : "",
       sections.length ? '<h3>Training Sections</h3><div class="lesson-list">' + sections.map(sectionItem).join("") + '</div>' : "",
       quiz.length ? renderQuiz(quiz) : '<p class="meta-line">Quiz will be added soon.</p>'
@@ -468,6 +474,24 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
+  }
+
+  function displayableArabic(value) {
+    var text = String(value || "").trim();
+
+    if (!text) {
+      return "";
+    }
+
+    var questionMarks = (text.match(/\?/g) || []).length;
+    var hasArabic = /[\u0600-\u06ff]/.test(text);
+    var hasMojibake = /[ØÙ]/.test(text);
+
+    if (questionMarks >= 3 || hasMojibake || !hasArabic) {
+      return "";
+    }
+
+    return text;
   }
 
   function setupReveal() {

@@ -1232,6 +1232,27 @@ body.dark-mode .metrics strong {
   background: color-mix(in srgb, var(--gold-soft) 42%, var(--panel));
 }
 
+.restore-card label {
+  display: grid;
+  gap: 7px;
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.restore-card input[type="file"] {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 10px;
+}
+
+.danger-card {
+  border-color: color-mix(in srgb, #b42318 45%, var(--line));
+  background: color-mix(in srgb, #b42318 7%, var(--surface));
+}
+
 .wide-card {
   grid-column: 1 / -1;
 }

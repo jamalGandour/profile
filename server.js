@@ -9,48 +9,12 @@ const ROOT = __dirname;
 const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(ROOT, "data");
 const DB_PATH = path.resolve(process.env.DB_PATH || path.join(DATA_DIR, "jamal-profile.db"));
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Jamal@3300";
+const BACKUP_DIR = path.join(path.dirname(DB_PATH), "backups");
+const MAX_RESTORE_BYTES = Number(process.env.MAX_RESTORE_BYTES || 100_000_000);
 
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
-const db = new DatabaseSync(DB_PATH);
-db.exec(`
-  CREATE TABLE IF NOT EXISTS blog_posts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title_en TEXT NOT NULL,
-    title_ar TEXT,
-    slug TEXT NOT NULL UNIQUE,
-    category TEXT,
-    summary_en TEXT,
-    summary_ar TEXT,
-    hero_image TEXT,
-    tags TEXT,
-    content_en TEXT,
-    content_ar TEXT,
-    status TEXT NOT NULL DEFAULT 'published',
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-  );
-
-  CREATE TABLE IF NOT EXISTS trainings (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title_en TEXT NOT NULL,
-    title_ar TEXT,
-    slug TEXT NOT NULL UNIQUE,
-    category TEXT,
-    level TEXT,
-    duration TEXT,
-    summary_en TEXT,
-    summary_ar TEXT,
-    hero_image TEXT,
-    video_links TEXT,
-    sections TEXT,
-    quiz TEXT,
-    status TEXT NOT NULL DEFAULT 'published',
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-  );
-`);
-
+let db = openDatabase();
 seedDatabase();
 
 const mimeTypes = {
@@ -87,6 +51,48 @@ server.listen(PORT, () => {
   console.log(`Admin password: ${ADMIN_PASSWORD}`);
 });
 
+function openDatabase() {
+  const database = new DatabaseSync(DB_PATH);
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS blog_posts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title_en TEXT NOT NULL,
+      title_ar TEXT,
+      slug TEXT NOT NULL UNIQUE,
+      category TEXT,
+      summary_en TEXT,
+      summary_ar TEXT,
+      hero_image TEXT,
+      tags TEXT,
+      content_en TEXT,
+      content_ar TEXT,
+      status TEXT NOT NULL DEFAULT 'published',
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS trainings (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title_en TEXT NOT NULL,
+      title_ar TEXT,
+      slug TEXT NOT NULL UNIQUE,
+      category TEXT,
+      level TEXT,
+      duration TEXT,
+      summary_en TEXT,
+      summary_ar TEXT,
+      hero_image TEXT,
+      video_links TEXT,
+      sections TEXT,
+      quiz TEXT,
+      status TEXT NOT NULL DEFAULT 'published',
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+  return database;
+}
+
 async function handleApi(req, res, url) {
   if (req.method === "GET" && url.pathname === "/api/admin/status") {
     requireAdmin(req);
@@ -103,6 +109,22 @@ async function handleApi(req, res, url) {
   if (req.method === "GET" && url.pathname === "/api/admin/backup/content") {
     requireAdmin(req);
     sendContentBackup(res);
+    return;
+  }
+
+  if (req.method === "POST" && url.pathname === "/api/admin/restore/content") {
+    requireAdmin(req);
+    const body = await readJson(req);
+    const result = restoreContentBackup(body);
+    sendJson(res, 200, result);
+    return;
+  }
+
+  if (req.method === "POST" && url.pathname === "/api/admin/restore/sqlite") {
+    requireAdmin(req);
+    const buffer = await readBodyBuffer(req, MAX_RESTORE_BYTES);
+    const result = restoreSqliteBackup(buffer);
+    sendJson(res, 200, result);
     return;
   }
 
@@ -359,7 +381,7 @@ function readJson(req) {
     let body = "";
     req.on("data", (chunk) => {
       body += chunk;
-      if (body.length > 8_000_000) {
+      if (body.length > MAX_RESTORE_BYTES) {
         reject(new Error("Request body is too large"));
         req.destroy();
       }
@@ -371,6 +393,25 @@ function readJson(req) {
         reject(error);
       }
     });
+    req.on("error", reject);
+  });
+}
+
+function readBodyBuffer(req, maxBytes) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let size = 0;
+
+    req.on("data", (chunk) => {
+      size += chunk.length;
+      if (size > maxBytes) {
+        reject(new Error("Uploaded file is too large"));
+        req.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
+    req.on("end", () => resolve(Buffer.concat(chunks)));
     req.on("error", reject);
   });
 }
@@ -469,12 +510,177 @@ function sendContentBackup(res) {
   );
 }
 
+function restoreContentBackup(payload) {
+  if (!payload || !Array.isArray(payload.blogs) || !Array.isArray(payload.trainings)) {
+    const error = new Error("Invalid content backup file");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const safetyBackup = backupCurrentDatabase("before-content-restore");
+  db.exec("BEGIN IMMEDIATE;");
+
+  try {
+    db.prepare("DELETE FROM blog_posts").run();
+    db.prepare("DELETE FROM trainings").run();
+
+    const blogInsert = db.prepare(`
+      INSERT INTO blog_posts
+      (id, title_en, title_ar, slug, category, summary_en, summary_ar, hero_image, tags, content_en, content_ar, status, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    payload.blogs.forEach((blog) => {
+      blogInsert.run(
+        positiveId(blog.id),
+        clean(blog.title_en) || "Untitled Blog Post",
+        clean(blog.title_ar),
+        clean(blog.slug) || uniqueSlug("blog_posts", blog.title_en),
+        clean(blog.category),
+        clean(blog.summary_en),
+        clean(blog.summary_ar),
+        clean(blog.hero_image),
+        Array.isArray(blog.tags) ? blog.tags.join(", ") : clean(blog.tags),
+        clean(blog.content_en),
+        clean(blog.content_ar),
+        blog.status === "draft" ? "draft" : "published",
+        validDate(blog.created_at),
+        validDate(blog.updated_at)
+      );
+    });
+
+    const trainingInsert = db.prepare(`
+      INSERT INTO trainings
+      (id, title_en, title_ar, slug, category, level, duration, summary_en, summary_ar, hero_image, video_links, sections, quiz, status, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    payload.trainings.forEach((training) => {
+      trainingInsert.run(
+        positiveId(training.id),
+        clean(training.title_en) || "Untitled Training Program",
+        clean(training.title_ar),
+        clean(training.slug) || uniqueSlug("trainings", training.title_en),
+        clean(training.category),
+        clean(training.level),
+        clean(training.duration),
+        clean(training.summary_en),
+        clean(training.summary_ar),
+        clean(training.hero_image),
+        JSON.stringify(toArray(training.video_links)),
+        JSON.stringify(toArray(training.sections)),
+        JSON.stringify(toArray(training.quiz)),
+        training.status === "draft" ? "draft" : "published",
+        validDate(training.created_at),
+        validDate(training.updated_at)
+      );
+    });
+
+    db.exec("COMMIT;");
+  } catch (error) {
+    db.exec("ROLLBACK;");
+    throw error;
+  }
+
+  return {
+    ok: true,
+    restored: {
+      blogs: payload.blogs.length,
+      trainings: payload.trainings.length
+    },
+    safety_backup: safetyBackup
+  };
+}
+
+function restoreSqliteBackup(buffer) {
+  if (!Buffer.isBuffer(buffer) || buffer.length < 100) {
+    const error = new Error("Invalid SQLite backup file");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  if (buffer.subarray(0, 16).toString("utf8") !== "SQLite format 3\u0000") {
+    const error = new Error("Uploaded file is not a SQLite database");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  fs.mkdirSync(BACKUP_DIR, { recursive: true });
+  const tempPath = path.join(BACKUP_DIR, `restore-upload-${backupStamp()}.db`);
+  fs.writeFileSync(tempPath, buffer);
+  validateSqliteDatabase(tempPath);
+  const safetyBackup = backupCurrentDatabase("before-sqlite-restore");
+
+  db.close();
+  fs.copyFileSync(tempPath, DB_PATH);
+  removeIfExists(`${DB_PATH}-wal`);
+  removeIfExists(`${DB_PATH}-shm`);
+  removeIfExists(tempPath);
+  db = openDatabase();
+  seedDatabase();
+
+  return {
+    ok: true,
+    restored_database: DB_PATH,
+    safety_backup: safetyBackup
+  };
+}
+
+function backupCurrentDatabase(reason) {
+  fs.mkdirSync(BACKUP_DIR, { recursive: true });
+  db.exec("PRAGMA wal_checkpoint(FULL);");
+  const backupPath = path.join(BACKUP_DIR, `${reason}-${backupStamp()}.db`);
+  fs.copyFileSync(DB_PATH, backupPath);
+  return backupPath;
+}
+
+function validateSqliteDatabase(filePath) {
+  let uploadedDb;
+  try {
+    uploadedDb = new DatabaseSync(filePath, { readOnly: true });
+    const result = uploadedDb.prepare("PRAGMA integrity_check;").get();
+    const value = result && Object.values(result)[0];
+    if (value !== "ok") {
+      throw new Error("SQLite integrity check failed");
+    }
+    const hasBlogs = uploadedDb.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'blog_posts'").get();
+    const hasTrainings = uploadedDb.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'trainings'").get();
+    if (!hasBlogs || !hasTrainings) {
+      throw new Error("SQLite file does not match this website database schema");
+    }
+  } finally {
+    if (uploadedDb) {
+      uploadedDb.close();
+    }
+  }
+}
+
 function backupStamp() {
   return new Date().toISOString().replace(/[:.]/g, "-");
 }
 
 function clean(value) {
   return typeof value === "string" ? value.trim() : "";
+}
+
+function positiveId(value) {
+  const id = Number(value);
+  return Number.isInteger(id) && id > 0 ? id : null;
+}
+
+function validDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+}
+
+function removeIfExists(filePath) {
+  try {
+    fs.unlinkSync(filePath);
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      throw error;
+    }
+  }
 }
 
 function toArray(value) {

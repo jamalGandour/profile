@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=7">
+    <link rel="stylesheet" href="styles.css?v=8">
   </head>
   <body>
     <header class="site-header">
@@ -235,6 +235,28 @@
                 <button class="button secondary" type="button" id="download-content-backup">Export Content JSON</button>
               </article>
 
+              <article class="settings-card restore-card">
+                <p class="meta-line">Safe Restore</p>
+                <h3>Restore Content JSON</h3>
+                <p>Restore blogs and training programs from a JSON export. The system creates a SQLite safety backup before replacing content.</p>
+                <label>
+                  <span>Select JSON backup</span>
+                  <input id="restore-content-file" type="file" accept="application/json,.json">
+                </label>
+                <button class="button ghost" type="button" id="restore-content-backup">Restore Content JSON</button>
+              </article>
+
+              <article class="settings-card restore-card danger-card">
+                <p class="meta-line">Full Database Restore</p>
+                <h3>Restore SQLite Database</h3>
+                <p>This replaces the active database after checking the uploaded SQLite file. A safety backup is created automatically first.</p>
+                <label>
+                  <span>Select SQLite backup</span>
+                  <input id="restore-sqlite-file" type="file" accept=".db,.sqlite,application/vnd.sqlite3">
+                </label>
+                <button class="button primary" type="button" id="restore-sqlite-backup">Restore SQLite Database</button>
+              </article>
+
               <article class="settings-card wide-card">
                 <p class="meta-line">System Status</p>
                 <h3>Production Data Location</h3>
@@ -262,6 +284,6 @@
       </section>
     </main>
 
-    <script src="admin.js?v=4"></script>
+    <script src="admin.js?v=5"></script>
   </body>
 </html>

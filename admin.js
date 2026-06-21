@@ -284,6 +284,8 @@
     var refreshButton = document.querySelector("#refresh-settings");
     var sqliteButton = document.querySelector("#download-sqlite-backup");
     var contentButton = document.querySelector("#download-content-backup");
+    var restoreContentButton = document.querySelector("#restore-content-backup");
+    var restoreSqliteButton = document.querySelector("#restore-sqlite-backup");
 
     if (refreshButton) {
       refreshButton.addEventListener("click", refreshSettings);
@@ -299,6 +301,14 @@
       contentButton.addEventListener("click", function () {
         downloadAdminFile("/api/admin/backup/content", "settings-status", "Preparing content JSON export...");
       });
+    }
+
+    if (restoreContentButton) {
+      restoreContentButton.addEventListener("click", restoreContentBackup);
+    }
+
+    if (restoreSqliteButton) {
+      restoreSqliteButton.addEventListener("click", restoreSqliteBackup);
     }
   }
 
@@ -369,6 +379,92 @@
         status.textContent = "Could not download backup. Check password and server permissions.";
       }
     }
+  }
+
+  async function restoreContentBackup() {
+    var fileInput = document.querySelector("#restore-content-file");
+    var status = document.querySelector("#settings-status");
+
+    if (!fileInput || !fileInput.files.length) {
+      status.textContent = "Select a JSON backup file first.";
+      return;
+    }
+
+    var confirmed = window.confirm("Restore content from this JSON file? Current blogs and training content will be replaced after a safety backup is created.");
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      status.textContent = "Reading JSON backup...";
+      var text = await fileInput.files[0].text();
+      var payload = JSON.parse(text);
+      status.textContent = "Restoring content backup...";
+
+      var result = await postJson("/api/admin/restore/content", payload);
+      status.textContent = "Content restored. Blogs: " + result.restored.blogs + ", Training: " + result.restored.trainings + ". Safety backup created.";
+      fileInput.value = "";
+      await refreshExisting();
+      await refreshSettings();
+    } catch {
+      status.textContent = "Could not restore JSON backup. Confirm the file is a valid content export.";
+    }
+  }
+
+  async function restoreSqliteBackup() {
+    var fileInput = document.querySelector("#restore-sqlite-file");
+    var status = document.querySelector("#settings-status");
+
+    if (!fileInput || !fileInput.files.length) {
+      status.textContent = "Select a SQLite .db backup file first.";
+      return;
+    }
+
+    var confirmed = window.confirm("Restore the full SQLite database? This replaces the active database after creating a safety backup. Continue only if you trust this backup file.");
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      status.textContent = "Uploading and validating SQLite backup...";
+      var response = await fetch("/api/admin/restore/sqlite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/octet-stream",
+          "x-admin-password": password
+        },
+        body: fileInput.files[0]
+      });
+
+      if (!response.ok) {
+        throw new Error("Restore failed");
+      }
+
+      var result = await response.json();
+      status.textContent = "SQLite database restored. Safety backup created before replacement.";
+      fileInput.value = "";
+      await refreshExisting();
+      await refreshSettings();
+    } catch {
+      status.textContent = "Could not restore SQLite backup. Confirm it is a valid backup from this website.";
+    }
+  }
+
+  async function postJson(url, payload) {
+    var response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-password": password
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
+
+    return response.json();
   }
 
   function statusRow(label, value) {

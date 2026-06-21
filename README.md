@@ -82,9 +82,17 @@ The Admin dashboard includes a `Settings` tab with:
 - System status and database path check
 - Full SQLite database download
 - JSON export for blog posts and training programs
+- Restore content from JSON export
+- Restore full SQLite database from backup
 - Hostinger pre-update checklist
 
 Use the SQLite backup before updating the Hostinger deployment from GitHub.
+
+Restore behavior:
+
+- JSON restore replaces blog and training content after creating a SQLite safety backup.
+- SQLite restore validates the uploaded database with SQLite integrity check, creates a safety backup, then replaces the active database.
+- Safety backups are stored in a `backups` folder beside the active database.
 
 Local development still works without `DB_PATH`; it will use:
 

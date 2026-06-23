@@ -356,13 +356,13 @@
 
     function updateLink() {
       var message = [
-        "Hello Jamal Ahmed, I would like to discuss a business improvement opportunity.",
+        "Hello Jamal Ahmed, I would like to book a free 30-minute Supply Chain & AI Diagnosis Call.",
         "",
         "Service: " + service.value,
         "Priority: " + priority.value,
         "Timeline: " + timeline.value,
         "",
-        "Please advise the recommended next step."
+        "Please advise the recommended diagnosis path and next step."
       ].join("\n");
 
       link.href = "https://wa.me/966509649029?text=" + encodeURIComponent(message);

@@ -377,6 +377,41 @@ body.dark-mode .metrics strong {
   font-weight: 900;
 }
 
+.hero-fast-proof {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.hero-fast-proof div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel) 88%, var(--gold-soft));
+  padding: 13px;
+  box-shadow: 0 12px 30px rgba(7, 50, 110, 0.07);
+}
+
+.hero-fast-proof strong {
+  display: block;
+  color: var(--blue-strong);
+  font-size: 24px;
+  line-height: 1;
+}
+
+body.dark-mode .hero-fast-proof strong {
+  color: var(--yellow);
+}
+
+.hero-fast-proof span {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
 .hero-scorecard {
   display: grid;
   gap: 10px;
@@ -419,6 +454,154 @@ body.dark-mode .metrics strong {
 .tools-band,
 .contact {
   background: var(--surface);
+}
+
+.lead-magnet {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+  gap: clamp(22px, 4vw, 48px);
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(11, 74, 162, 0.94), rgba(5, 7, 10, 0.98)),
+    var(--black);
+  color: var(--white);
+}
+
+.lead-magnet h2,
+.lead-magnet p {
+  color: var(--white);
+}
+
+.lead-magnet p {
+  max-width: 760px;
+}
+
+.lead-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.light-button {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+}
+
+.checklist-preview {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 24px;
+  box-shadow: 0 20px 58px rgba(0, 0, 0, 0.24);
+}
+
+.checklist-preview span,
+.proof-card span {
+  display: inline-flex;
+  margin-bottom: 12px;
+  color: var(--yellow);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.checklist-preview ul,
+.before-after-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checklist-preview li,
+.before-after-list li {
+  position: relative;
+  padding-left: 24px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+}
+
+.checklist-preview li::before,
+.before-after-list li::before {
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  color: var(--yellow);
+  content: "+";
+  font-weight: 900;
+}
+
+.before-after-section {
+  background: var(--surface);
+}
+
+.before-after-grid,
+.proof-grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.before-after-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.before-card,
+.after-card,
+.proof-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 24px;
+  box-shadow: 0 14px 36px rgba(7, 50, 110, 0.08);
+}
+
+.before-card {
+  border-top: 5px solid var(--line);
+}
+
+.after-card {
+  border-top: 5px solid var(--gold);
+}
+
+.before-card .before-after-list li,
+.after-card .before-after-list li {
+  color: var(--muted);
+}
+
+.before-card .before-after-list li::before {
+  color: var(--muted);
+  content: "-";
+}
+
+.after-card .before-after-list li::before {
+  color: var(--gold);
+}
+
+.proof-section {
+  background: var(--bg);
+}
+
+.proof-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.proof-card {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.proof-card p {
+  margin-bottom: 0;
+}
+
+.quote-card {
+  border-color: var(--gold);
+  background: color-mix(in srgb, var(--gold-soft) 45%, var(--panel));
 }
 
 .dark-band,
@@ -1450,11 +1633,13 @@ footer {
   .course-grid,
   .content-grid,
   .start-grid,
+  .hero-fast-proof,
   .package-grid,
   .case-grid,
   .trust-grid,
   .method-timeline,
-  .resource-grid {
+  .resource-grid,
+  .proof-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -1481,6 +1666,7 @@ footer {
 
   .hero,
   .intro,
+  .lead-magnet,
   .contact {
     grid-template-columns: 1fr;
   }
@@ -1495,12 +1681,15 @@ footer {
   .course-grid,
   .content-grid,
   .start-grid,
+  .hero-fast-proof,
   .package-grid,
   .case-grid,
   .academy-paths,
   .trust-grid,
   .method-timeline,
   .resource-grid,
+  .before-after-grid,
+  .proof-grid,
   .settings-grid,
   .form-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1537,7 +1726,8 @@ footer {
   }
 
   .hero-actions,
-  .contact-actions {
+  .contact-actions,
+  .lead-actions {
     flex-direction: column;
   }
 
@@ -1553,6 +1743,7 @@ footer {
   .course-grid,
   .content-grid,
   .start-grid,
+  .hero-fast-proof,
   .package-grid,
   .case-grid,
   .academy-paths,
@@ -1560,6 +1751,8 @@ footer {
   .trust-grid,
   .method-timeline,
   .resource-grid,
+  .before-after-grid,
+  .proof-grid,
   .settings-grid,
   .form-grid,
   .admin-list article {

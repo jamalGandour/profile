@@ -160,6 +160,7 @@
 
   function renderTrainingCard(training) {
     var titleAr = displayableArabic(training.title_ar);
+    var info = trainingSalesInfo(training);
     return [
       '<article class="content-card">',
       imageHtml(training.hero_image, training.title_en),
@@ -168,6 +169,11 @@
       '<h3>' + escapeHtml(training.title_en) + '</h3>',
       titleAr ? '<p class="arabic-card-title" dir="rtl" lang="ar">' + escapeHtml(titleAr) + '</p>' : "",
       '<p>' + escapeHtml(training.summary_en || "") + '</p>',
+      '<div class="training-info">',
+      '<span><strong>Who:</strong> ' + escapeHtml(info.audience) + '</span>',
+      '<span><strong>Outcome:</strong> ' + escapeHtml(info.outcome) + '</span>',
+      '<span><strong>Certificate:</strong> Available</span>',
+      '</div>',
       '<button class="button primary small-button" type="button" data-training-slug="' + escapeHtml(training.slug) + '">Start Training</button>',
       '</div>',
       '</article>'
@@ -213,6 +219,7 @@
     var quiz = training.quiz || [];
     var titleAr = displayableArabic(training.title_ar);
     var summaryAr = displayableArabic(training.summary_ar);
+    var info = trainingSalesInfo(training);
     activeQuiz = quiz;
 
     openModal([
@@ -222,6 +229,11 @@
       titleAr ? '<h3 dir="rtl" lang="ar">' + escapeHtml(titleAr) + '</h3>' : "",
       '<p>' + escapeHtml(training.summary_en || "") + '</p>',
       summaryAr ? '<p dir="rtl" lang="ar">' + escapeHtml(summaryAr) + '</p>' : "",
+      '<div class="training-info modal-training-info">',
+      '<span><strong>Who should attend:</strong> ' + escapeHtml(info.audience) + '</span>',
+      '<span><strong>Business outcome:</strong> ' + escapeHtml(info.outcome) + '</span>',
+      '<span><strong>Certificate:</strong> Available for corporate programs</span>',
+      '</div>',
       videos.length ? '<h3>Training Videos</h3><div class="video-grid">' + videos.map(videoPlayer).join("") + '</div>' : "",
       sections.length ? '<h3>Training Sections</h3><div class="lesson-list">' + sections.map(sectionItem).join("") + '</div>' : "",
       quiz.length ? renderQuiz(quiz) : '<p class="meta-line">Quiz will be added soon.</p>'
@@ -492,6 +504,51 @@
     }
 
     return text;
+  }
+
+  function trainingSalesInfo(training) {
+    var title = String(training.title_en || "").toLowerCase();
+    var category = String(training.category || "").toLowerCase();
+
+    if (title.includes("inventory") || category.includes("inventory")) {
+      return {
+        audience: "inventory, planning, warehouse, and supply chain teams",
+        outcome: "build stock-health visibility and reduce inventory risk"
+      };
+    }
+
+    if (title.includes("demand") || category.includes("demand")) {
+      return {
+        audience: "demand planners, sales planners, supply planners, and managers",
+        outcome: "improve forecast review discipline and exception management"
+      };
+    }
+
+    if (title.includes("dashboard") || category.includes("dashboard")) {
+      return {
+        audience: "managers, analysts, planners, and reporting owners",
+        outcome: "create clearer KPI dashboards and faster management reporting"
+      };
+    }
+
+    if (title.includes("agent") || category.includes("agent")) {
+      return {
+        audience: "customer service, sales, inventory, and operations teams",
+        outcome: "design practical AI agents with clear business guardrails"
+      };
+    }
+
+    if (title.includes("ai") || category.includes("ai")) {
+      return {
+        audience: "managers, supervisors, analysts, and business professionals",
+        outcome: "use AI tools safely for analysis, reporting, and productivity"
+      };
+    }
+
+    return {
+      audience: "business teams and professionals",
+      outcome: "turn learning into practical daily execution"
+    };
   }
 
   function setupReveal() {

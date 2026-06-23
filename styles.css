@@ -472,6 +472,81 @@ body.dark-mode .metrics strong {
   padding: 22px;
 }
 
+.start-section {
+  background: var(--surface);
+}
+
+.start-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.start-grid article,
+.section-cta,
+.assessment-band {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 22px;
+  box-shadow: 0 14px 36px rgba(7, 50, 110, 0.08);
+}
+
+.start-grid article {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.start-grid span {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.assessment-band,
+.section-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  margin: 28px clamp(20px, 5vw, 72px);
+}
+
+.assessment-band {
+  background: var(--black);
+  color: var(--white);
+}
+
+.assessment-band h2,
+.assessment-band p,
+.dark-cta h3,
+.dark-cta p {
+  color: var(--white);
+}
+
+.assessment-band h2,
+.section-cta h3 {
+  margin-bottom: 8px;
+}
+
+.assessment-band p,
+.section-cta p {
+  margin-bottom: 0;
+}
+
+.section-cta {
+  margin-inline: 0;
+  background: color-mix(in srgb, var(--gold-soft) 35%, var(--panel));
+}
+
+.dark-cta {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: #101827;
+}
+
 .package-grid,
 .lab-layout,
 .case-grid,
@@ -610,6 +685,22 @@ body.dark-mode .metrics strong {
   display: grid;
   gap: 10px;
   align-content: start;
+}
+
+.case-detail {
+  display: grid;
+  gap: 4px;
+}
+
+.case-detail strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.case-detail p {
+  margin: 0;
 }
 
 .case-metrics {
@@ -781,6 +872,31 @@ body.dark-mode .metrics strong {
   display: grid;
   gap: 10px;
   padding: 20px;
+}
+
+.training-info {
+  display: grid;
+  gap: 7px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.training-info span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.training-info strong {
+  color: var(--ink);
+}
+
+.modal-training-info {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 14px;
 }
 
 .content-image {
@@ -1333,6 +1449,7 @@ footer {
   .card-grid.five,
   .course-grid,
   .content-grid,
+  .start-grid,
   .package-grid,
   .case-grid,
   .trust-grid,
@@ -1377,6 +1494,7 @@ footer {
   .card-grid.six,
   .course-grid,
   .content-grid,
+  .start-grid,
   .package-grid,
   .case-grid,
   .academy-paths,
@@ -1389,7 +1507,9 @@ footer {
   }
 
   .lab-layout,
-  .academy-panel {
+  .academy-panel,
+  .assessment-band,
+  .section-cta {
     grid-template-columns: 1fr;
   }
 
@@ -1432,6 +1552,7 @@ footer {
   .card-grid.six,
   .course-grid,
   .content-grid,
+  .start-grid,
   .package-grid,
   .case-grid,
   .academy-paths,
@@ -1447,6 +1568,11 @@ footer {
 
   .status-row {
     grid-template-columns: 1fr;
+  }
+
+  .assessment-band,
+  .section-cta {
+    margin-inline: 18px;
   }
 
   .site-header {
